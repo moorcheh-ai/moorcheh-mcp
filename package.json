@@ -2,15 +2,18 @@
   "name": "moorcheh-mcp-server",
   "version": "1.0.0",
   "description": "Moorcheh MCP Server with completable functionality for AI-powered search and answer operations",
-  "main": "index.mjs",
+  "main": "server/index.js",
   "type": "module",
   "bin": {
-    "moorcheh-mcp": "./index.mjs"
+    "moorcheh-mcp": "./server/index.js"
   },
   "scripts": {
-    "start": "node index.mjs",
-    "dev": "node --watch index.mjs",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "build": "echo 'No build step required'",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "echo \"No linting configured\"",
+    "format": "echo \"No formatting configured\""
   },
   "keywords": [
     "mcp",
@@ -20,9 +23,13 @@
     "bedrock",
     "vector",
     "semantic",
-    "completable"
+    "completable",
+    "model-context-protocol",
+    "knowledge-base",
+    "document-search"
   ],
   "author": "Moorcheh Team",
+  "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.0",
     "zod": "^3.22.4",
@@ -41,5 +48,13 @@
   "bugs": {
     "url": "https://github.com/moorcheh/moorcheh-mcp/issues"
   },
-  "homepage": "https://github.com/moorcheh/moorcheh-mcp#readme"
+  "homepage": "https://github.com/moorcheh/moorcheh-mcp#readme",
+  "files": [
+    "server/",
+    "README.md",
+    "LICENSE"
+  ],
+  "directories": {
+    "lib": "server"
+  }
 } 
