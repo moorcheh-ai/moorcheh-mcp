@@ -52,6 +52,10 @@ That's it! Your Moorcheh MCP server is now running and ready to use.
 
 To use the Moorcheh MCP server with Claude Desktop:
 
+
+https://github.com/user-attachments/assets/ee87a129-3d3f-495e-b9b8-e10b6af7b6af
+
+
 ### Step 1: Install Claude Desktop
 1. Download Claude Desktop from [https://claude.ai/download](https://claude.ai/download)
 2. Install and launch Claude Desktop
