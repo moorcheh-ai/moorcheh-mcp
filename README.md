@@ -128,5 +128,5 @@ MIT License - see LICENSE file for details.
 ## Support
 
 For support and questions:
-- GitHub Issues: [[https://github.com/moorcheh/moorcheh-mcp/issues](https://github.com/moorcheh-ai/moorcheh-mcp/issues)]
+- GitHub Issues: [ttps://github.com/moorcheh-ai/moorcheh-mcp/issues](https://github.com/moorcheh-ai/moorcheh-mcp/issues)
 - Documentation: [https://console.moorcheh.ai/docs](https://console.moorcheh.ai/docs) 

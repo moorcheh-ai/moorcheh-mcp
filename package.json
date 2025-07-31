@@ -36,10 +36,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/moorcheh/moorcheh-mcp.git"
+    "url": "https://github.com/moorcheh-ai/moorcheh-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/moorcheh/moorcheh-mcp/issues"
+    "url": "https://github.com/moorcheh-ai/moorcheh-mcp/issues"
   },
-  "homepage": "https://github.com/moorcheh/moorcheh-mcp#readme"
+  "homepage": "https://github.com/moorcheh-ai/moorcheh-mcp#readme"
 } 
