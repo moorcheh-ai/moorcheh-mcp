@@ -1,0 +1,45 @@
+{
+  "name": "moorcheh-mcp-server",
+  "version": "1.0.0",
+  "description": "Moorcheh MCP Server with completable functionality for AI-powered search and answer operations",
+  "main": "index.mjs",
+  "type": "module",
+  "bin": {
+    "moorcheh-mcp": "./index.mjs"
+  },
+  "scripts": {
+    "start": "node index.mjs",
+    "dev": "node --watch index.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mcp",
+    "moorcheh",
+    "ai",
+    "search",
+    "bedrock",
+    "vector",
+    "semantic",
+    "completable"
+  ],
+  "author": "Moorcheh Team",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.0",
+    "zod": "^3.22.4",
+    "axios": "^1.11.0"
+  },
+  "devDependencies": {
+    "node": ">=18.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moorcheh/moorcheh-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/moorcheh/moorcheh-mcp/issues"
+  },
+  "homepage": "https://github.com/moorcheh/moorcheh-mcp#readme"
+} 
