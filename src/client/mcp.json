@@ -1,0 +1,13 @@
+{
+  "mcpServers":{ 
+      "Moorcheh": {
+          "command": "node",
+          "args": [
+          "path\\to\\moorcheh-mcp\\src\\server\\index.js"
+          ],
+          "env": {
+          "NODE_ENV": "development"
+          }
+      }
+  }
+}

@@ -8,7 +8,7 @@ const __dirname = dirname(__filename);
 
 // Load environment variables from .env file silently without dotenv
 try {
-  const envPath = join(__dirname, '../../.env');
+  const envPath = join(__dirname, '../../../.env');
   const envContent = readFileSync(envPath, 'utf8');
   const envLines = envContent.split('\n');
   
