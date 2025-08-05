@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * Moorcheh MCP Client Test
  * 
