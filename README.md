@@ -223,12 +223,12 @@ npm run dev
 ### Getting Help
 
 - **GitHub Issues**: [https://github.com/moorcheh-ai/moorcheh-mcp/issues](https://github.com/moorcheh-ai/moorcheh-mcp/issues)
-- **Moorcheh Documentation**: [https://console.moorcheh.ai/docs](https://console.moorcheh.ai/docs)
+- **Moorcheh Documentation**: [https://console.moorcheh.ai/docs/mcp](https://console.moorcheh.ai/docs/mcp)
 - **Moorcheh Dashboard**: [https://console.moorcheh.ai](https://console.moorcheh.ai)
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
 ## Contributing
 
