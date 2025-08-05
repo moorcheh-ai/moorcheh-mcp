@@ -27,16 +27,16 @@ try {
 }
 
 // Configure API endpoints
-const API_KEY = process.env.MOORCHEH_API_KEY;
+const MOORCHEH_API_KEY = process.env.MOORCHEH_API_KEY;
 
-if (!API_KEY) {
+if (!MOORCHEH_API_KEY) {
   console.error('Missing required API_KEY environment variable');
-  console.error('Please create a .env file in this directory with: API_KEY=your_actual_api_key');
+  console.error('Please create a .env file in this directory with: MOORCHEH_API_KEY=your_actual_api_key');
   process.exit(1);
 }
 
 // Debug: Check if API key looks valid (don't log the full key for security)
-if (API_KEY === 'your_api_key_here' || API_KEY.length < 10) {
+if (MOORCHEH_API_KEY === 'your_api_key_here' || MOORCHEH_API_KEY.length < 10) {
   console.error('Warning: API_KEY appears to be invalid or placeholder');
   console.error('Please check your .env file and ensure you have a valid Moorcheh API key');
 }
@@ -59,8 +59,7 @@ async function makeApiRequest(method, url, data = null) {
       method,
       url,
       headers: {
-        'x-api-key': API_KEY,
-        'Authorization': `Bearer ${API_KEY}`,
+        'x-api-key': MOORCHEH_API_KEY,
         'Content-Type': 'application/json',
       },
     };
@@ -88,4 +87,4 @@ async function makeApiRequest(method, url, data = null) {
   }
 }
 
-export { API_ENDPOINTS, makeApiRequest, API_KEY }; 
+export { API_ENDPOINTS, makeApiRequest, MOORCHEH_API_KEY }; 

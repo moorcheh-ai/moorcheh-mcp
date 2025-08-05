@@ -2,7 +2,7 @@ import { makeApiRequest, API_ENDPOINTS } from '../config/api.js';
 
 // Resource for namespace listing
 export const namespacesResource = {
-  uri: "https://console.moorcheh.ai/docs",
+  uri: "moorcheh://docs/namespaces",
   description: "List of all Moorcheh namespaces",
   mimeType: "application/json",
   handler: async () => {
@@ -81,7 +81,7 @@ export const configHelpResource = {
 Create a \`.env\` file in the same directory as this script with:
 
 \`\`\`
-API_KEY=your_moorcheh_api_key
+MOORCHEH_API_KEY=your_moorcheh_api_key
 \`\`\`
 
 ## Troubleshooting

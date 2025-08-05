@@ -1,4 +1,13 @@
-# Moorcheh MCP Server
+<div align="left">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/moorcheh-logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/moorcheh-logo-light.svg">
+    <img width="250px" alt="Moorcheh Logo" src="assets/moorcheh-logo-light.svg">
+  </picture>
+  <br />
+  <h1>Moorcheh MCP Server</h1>
+  <p>A Model Context Protocol (MCP) server that provides seamless integration with Moorcheh's Embedding, Vector Store, Search, and Gen AI Answer services.</p>
+</div>
 
 A Model Context Protocol (MCP) server that provides seamless integration with Moorcheh's AI-powered search and answer services. This server enables you to interact with Moorcheh's semantic search and AI capabilities through the Model Context Protocol.
 
