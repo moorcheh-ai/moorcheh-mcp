@@ -1,6 +1,6 @@
 {
   "name": "moorcheh-mcp",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Moorcheh MCP Server with completable functionality for AI-powered search and answer operations",
   "main": "src/server/index.js",
   "type": "module",

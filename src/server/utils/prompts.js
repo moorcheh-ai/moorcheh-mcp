@@ -1,24 +1,18 @@
+import { z } from 'zod';
+
 // Search optimization prompt
 export const searchOptimizationPrompt = {
   name: 'search-optimization',
   description: 'Tips for optimizing search queries in Moorcheh',
-  arguments: [
-    {
-      name: 'search_type',
-      description: 'Type of search (text or vector)',
-      required: false
-    },
-    {
-      name: 'domain',
-      description: 'Domain or topic area of your content',
-      required: false
-    }
-  ],
+  argsSchema: {
+    search_type: z.enum(['text','vector']).optional().describe('Type of search (text or vector)'),
+    domain: z.string().optional().describe('Domain or topic area of your content')
+  },
   handler: async (args) => {
     const searchType = args?.search_type || 'text';
     const domain = args?.domain || 'general';
     
-    return `# Moorcheh Search Optimization Guide
+    const text = `# Moorcheh Search Optimization Guide
 
 ## Optimizing ${searchType} search for ${domain} content
 
@@ -137,6 +131,15 @@ The search returns results with:
 - **text**: Original text content (for text namespaces)
 - **metadata**: Associated metadata
 `;
+
+    return {
+      messages: [
+        {
+          role: 'assistant',
+          content: { type: 'text', text }
+        }
+      ]
+    };
   }
 };
 
@@ -144,23 +147,15 @@ The search returns results with:
 export const dataOrganizationPrompt = {
   name: 'data-organization',
   description: 'Best practices for organizing data in Moorcheh namespaces',
-  arguments: [
-    {
-      name: 'content_type',
-      description: 'Type of content you\'re organizing',
-      required: false
-    },
-    {
-      name: 'team_size',
-      description: 'Size of your team using this data',
-      required: false
-    }
-  ],
+  argsSchema: {
+    content_type: z.string().optional().describe("Type of content you're organizing"),
+    team_size: z.enum(['small','large']).optional().describe('Size of your team using this data')
+  },
   handler: async (args) => {
     const contentType = args?.content_type || 'documents';
     const teamSize = args?.team_size || 'small';
     
-    return `# Moorcheh Data Organization Guide
+    const text = `# Moorcheh Data Organization Guide
 
 ## Organizing ${contentType} for a ${teamSize} team
 
@@ -230,6 +225,15 @@ ${teamSize === 'large' ? `
 
 This organization will help your ${teamSize} team efficiently manage and search through your ${contentType}.
 `;
+
+    return {
+      messages: [
+        {
+          role: 'assistant',
+          content: { type: 'text', text }
+        }
+      ]
+    };
   }
 };
 
@@ -237,23 +241,15 @@ This organization will help your ${teamSize} team efficiently manage and search 
 export const aiAnswerSetupPrompt = {
   name: 'ai-answer-setup',
   description: 'Guide for configuring AI-powered answers in Moorcheh',
-  arguments: [
-    {
-      name: 'answer_style',
-      description: 'Desired style for AI answers (concise, detailed, technical, friendly)',
-      required: false
-    },
-    {
-      name: 'context_type',
-      description: 'Type of context/domain for answers',
-      required: false
-    }
-  ],
+  argsSchema: {
+    answer_style: z.enum(['concise','detailed','technical','friendly','balanced']).optional().describe('Desired style for AI answers'),
+    context_type: z.string().optional().describe('Type of context/domain for answers')
+  },
   handler: async (args) => {
     const answerStyle = args?.answer_style || 'balanced';
     const contextType = args?.context_type || 'general';
     
-    return `# Moorcheh AI Answer Configuration Guide
+    const text = `# Moorcheh AI Answer Configuration Guide
 
 ## Setting up ${answerStyle} AI answers for ${contextType} content
 
@@ -350,5 +346,14 @@ Include previous conversation context to:
 
 This configuration will provide ${answerStyle} answers tailored to your ${contextType} use case.
 `;
+
+    return {
+      messages: [
+        {
+          role: 'assistant',
+          content: { type: 'text', text }
+        }
+      ]
+    };
   }
 }; 

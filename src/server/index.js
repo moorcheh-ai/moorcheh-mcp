@@ -166,28 +166,37 @@ server.tool(
 
 // ========== REGISTER PROMPTS ==========
 
-// Register search optimization prompt
+// Register search optimization prompt (new SDK signature)
 server.registerPrompt(
   searchOptimizationPrompt.name,
-  searchOptimizationPrompt.description,
-  searchOptimizationPrompt.arguments,
-  searchOptimizationPrompt.handler
+  {
+    title: 'Search Optimization',
+    description: searchOptimizationPrompt.description,
+    argsSchema: searchOptimizationPrompt.argsSchema,
+  },
+  async (args) => searchOptimizationPrompt.handler(args)
 );
 
 // Register data organization prompt
 server.registerPrompt(
   dataOrganizationPrompt.name,
-  dataOrganizationPrompt.description,
-  dataOrganizationPrompt.arguments,
-  dataOrganizationPrompt.handler
+  {
+    title: 'Data Organization',
+    description: dataOrganizationPrompt.description,
+    argsSchema: dataOrganizationPrompt.argsSchema,
+  },
+  async (args) => dataOrganizationPrompt.handler(args)
 );
 
 // Register AI answer setup prompt
 server.registerPrompt(
   aiAnswerSetupPrompt.name,
-  aiAnswerSetupPrompt.description,
-  aiAnswerSetupPrompt.arguments,
-  aiAnswerSetupPrompt.handler
+  {
+    title: 'AI Answer Setup',
+    description: aiAnswerSetupPrompt.description,
+    argsSchema: aiAnswerSetupPrompt.argsSchema,
+  },
+  async (args) => aiAnswerSetupPrompt.handler(args)
 );
 
 // Start the server
