@@ -236,6 +236,13 @@ We welcome contributions! Please feel free to submit a Pull Request.
 
 ## Changelog
 
+### v1.1.0
+- Enhanced prompt system with dynamic content generation
+- Added comprehensive argument schemas with Zod validation
+- Improved search optimization, data organization, and AI answer setup prompts
+- Updated prompt registration to use new MCP SDK signature
+- Better user guidance and interactive prompt responses
+
 ### v1.0.0
 - Initial release with MCP server functionality
 - Support for text and vector operations
