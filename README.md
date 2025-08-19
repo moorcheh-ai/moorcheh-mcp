@@ -156,6 +156,7 @@ The Moorcheh MCP server provides tools for:
 ### Data Tools
 - **`upload-text`**: Upload text documents to a namespace
 - **`upload-vectors`**: Upload vector embeddings to a namespace
+- **`get-data`**: Retrieve text documents by ID from text namespaces
 - **`delete-data`**: Remove specific data items from a namespace
 
 ### Search & AI Tools
@@ -235,6 +236,12 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 We welcome contributions! Please feel free to submit a Pull Request.
 
 ## Changelog
+
+### v1.2.0
+- New tool: `get-data` to fetch documents by ID from text namespaces (POST /namespaces/{name}/documents/get)
+- Reliability: Static documentation resources to avoid invalid URI errors in MCP clients
+- Windows compatibility: Use ';' for command chaining in PowerShell
+- Stability: Ensured stdout handling respects MCP JSON-RPC framing
 
 ### v1.1.0
 - Enhanced prompt system with dynamic content generation

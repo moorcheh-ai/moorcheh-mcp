@@ -119,3 +119,40 @@ export const deleteDataTool = {
     }
   },
 }; 
+
+// Get data by IDs tool (for text namespaces)
+export const getDataTool = {
+  name: "get-data",
+  description: "Get specific data items by ID from a text namespace in Moorcheh",
+  parameters: {
+    namespace_name: z.string().describe("Name of the text namespace to read from"),
+    ids: z.array(z.string()).describe("Array of document IDs to retrieve"),
+  },
+  handler: async ({ namespace_name, ids }) => {
+    try {
+      const data = await makeApiRequest('POST', `${API_ENDPOINTS.namespaces}/${namespace_name}/documents/get`, {
+        ids,
+      });
+
+      const resultText = `Fetched ${ids.length} item(s) from namespace "${namespace_name}":\n${JSON.stringify(data, null, 2)}`;
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: resultText,
+          },
+        ],
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Error fetching data: ${error.message}`,
+          },
+        ],
+      };
+    }
+  },
+};
