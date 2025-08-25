@@ -289,6 +289,12 @@ We welcome contributions! Please feel free to submit a Pull Request.
 
 ## Changelog
 
+### v1.2.1
+- NPX Support: Added CLI wrapper for seamless `npx -y @moorcheh/mcp` execution
+- Package Structure: Configured for npm registry publishing as `@moorcheh/mcp`
+- CLI Features: Added help, version commands and API key validation
+- User Experience: Improved error messages and installation guidance
+
 ### v1.2.0
 - New tool: `get-data` to fetch documents by ID from text namespaces (POST /namespaces/{name}/documents/get)
 - Reliability: Static documentation resources to avoid invalid URI errors in MCP clients
