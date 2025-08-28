@@ -19,7 +19,7 @@ if (args.includes('--help') || args.includes('-h')) {
 Moorcheh MCP Server
 ===================
 
-Usage: npx @moorcheh/mcp [options]
+Usage: npx @moorchehai/mcp [options]
 
 Options:
   --help, -h     Show this help message
@@ -29,8 +29,8 @@ Environment Variables:
   MOORCHEH_API_KEY  Your Moorcheh API key (required)
 
 Examples:
-  npx @moorcheh/mcp                    # Start the MCP server
-  MOORCHEH_API_KEY=xxx npx @moorcheh/mcp  # Start with API key
+  npx @moorchehai/mcp                    # Start the MCP server
+  MOORCHEH_API_KEY=xxx npx @moorchehai/mcp  # Start with API key
 
 For more information, visit: https://github.com/moorcheh-ai/moorcheh-mcp
 `);
@@ -50,7 +50,7 @@ if (!process.env.MOORCHEH_API_KEY) {
 ❌ Error: Missing MOORCHEH_API_KEY environment variable
 
 Please set your Moorcheh API key:
-  MOORCHEH_API_KEY=your_api_key_here npx @moorcheh/mcp
+  MOORCHEH_API_KEY=your_api_key_here npx @moorchehai/mcp
 
 Get your API key at: https://app.moorcheh.ai
 `);

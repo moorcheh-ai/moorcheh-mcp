@@ -21,7 +21,7 @@ The easiest way to get started:
 
 ```bash
 # Set your API key and run directly
-MOORCHEH_API_KEY=your_api_key_here npx -y @moorcheh/mcp
+MOORCHEH_API_KEY=your_api_key_here npx -y @moorchehai/mcp
 ```
 
 ### Option 2: Manual Installation
@@ -92,7 +92,7 @@ https://github.com/user-attachments/assets/fccbba8e-7393-4b74-8a73-769b55b3f3a3
       "mcpServers": { 
             "moorcheh": {
                "command": "npx",
-               "args": ["-y", "@moorcheh/mcp"],
+               "args": ["-y", "@moorchehai/mcp"],
                "env": {
                   "MOORCHEH_API_KEY": "your_actual_api_key_here"
                }
@@ -150,7 +150,7 @@ To use the Moorcheh MCP server with Cursor IDE:
    "mcpServers": { 
          "moorcheh": {
             "command": "npx",
-            "args": ["-y", "@moorcheh/mcp"],
+            "args": ["-y", "@moorchehai/mcp"],
             "env": {
                "MOORCHEH_API_KEY": "your_actual_api_key_here"
             }
@@ -288,6 +288,13 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 We welcome contributions! Please feel free to submit a Pull Request.
 
 ## Changelog
+
+### v1.2.2
+- Package Name: Updated to `@moorchehai/mcp` for official Moorcheh organization
+- NPX Support: Added CLI wrapper for seamless `npx -y @moorchehai/mcp` execution
+- Package Structure: Configured for npm registry publishing
+- CLI Features: Added help, version commands and API key validation
+- User Experience: Improved error messages and installation guidance
 
 ### v1.2.1
 - NPX Support: Added CLI wrapper for seamless `npx -y @moorcheh/mcp` execution

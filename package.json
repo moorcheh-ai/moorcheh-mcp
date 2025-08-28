@@ -1,6 +1,6 @@
 {
-  "name": "@moorcheh/mcp",
-  "version": "1.2.1",
+  "name": "@moorchehai/mcp",
+  "version": "1.2.2",
   "description": "Moorcheh MCP Server with completable functionality for AI-powered search and answer operations",
   "main": "src/server/index.js",
   "type": "module",
