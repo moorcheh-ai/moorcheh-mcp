@@ -1,12 +1,10 @@
 {
-  "mcpServers":{ 
-      "Moorcheh": {
-          "command": "node",
-          "args": [
-          "path\\to\\moorcheh-mcp\\src\\server\\index.js"
-          ],
+  "mcpServers": { 
+      "moorcheh": {
+          "command": "npx",
+          "args": ["-y", "@moorcheh/mcp"],
           "env": {
-          "NODE_ENV": "development"
+              "MOORCHEH_API_KEY": "your_actual_api_key_here"
           }
       }
   }

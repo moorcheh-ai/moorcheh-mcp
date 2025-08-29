@@ -1,11 +1,16 @@
 {
-  "name": "moorcheh-mcp",
-  "version": "1.2.0",
+  "name": "@moorchehai/mcp",
+  "version": "1.2.2",
   "description": "Moorcheh MCP Server with completable functionality for AI-powered search and answer operations",
   "main": "src/server/index.js",
   "type": "module",
   "bin": {
-    "moorcheh-mcp": "./src/server/index.js"
+    "moorcheh-mcp": "bin/cli.js",
+    "mcp": "bin/cli.js"
+  },
+  "preferGlobal": true,
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "start": "node src/server/index.js",
@@ -43,7 +48,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/moorcheh-ai/moorcheh-mcp.git"
+    "url": "git+https://github.com/moorcheh-ai/moorcheh-mcp.git"
   },
   "bugs": {
     "url": "https://github.com/moorcheh-ai/moorcheh-mcp/issues"
@@ -51,6 +56,8 @@
   "homepage": "https://github.com/moorcheh-ai/moorcheh-mcp#readme",
   "files": [
     "src/",
+    "bin/",
+    "assets/",
     "env.example",
     "README.md",
     "LICENSE"
@@ -58,4 +65,4 @@
   "directories": {
     "lib": "src/server"
   }
-} 
+}
