@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { readFileSync } from 'fs';
+import { readFileSync, createReadStream, statSync } from 'fs';
 import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { dirname, join, basename } from 'path';
+import FormData from 'form-data';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -87,4 +88,57 @@ async function makeApiRequest(method, url, data = null) {
   }
 }
 
-export { API_ENDPOINTS, makeApiRequest, MOORCHEH_API_KEY }; 
+// Helper function to upload files (multipart/form-data)
+async function uploadFile(namespace_name, filePath) {
+  try {
+    // Check if file exists
+    const stats = statSync(filePath);
+    const fileSizeInMB = stats.size / (1024 * 1024);
+    
+    // Check file size (max 10MB)
+    if (fileSizeInMB > 10) {
+      throw new Error(`File size (${fileSizeInMB.toFixed(2)}MB) exceeds maximum allowed size of 10MB`);
+    }
+    
+    // Check file extension
+    const allowedExtensions = ['.pdf', '.docx', '.xlsx', '.json', '.txt', '.csv', '.md'];
+    const fileExtension = filePath.toLowerCase().substring(filePath.lastIndexOf('.'));
+    if (!allowedExtensions.includes(fileExtension)) {
+      throw new Error(`File type '${fileExtension}' is not supported. Allowed types: ${allowedExtensions.join(', ')}`);
+    }
+    
+    // Create FormData
+    const formData = new FormData();
+    const fileName = basename(filePath);
+    formData.append('file', createReadStream(filePath), fileName);
+    
+    // Make the request
+    const url = `${API_ENDPOINTS.namespaces}/${namespace_name}/upload-file`;
+    const response = await axios.post(url, formData, {
+      headers: {
+        'x-api-key': MOORCHEH_API_KEY,
+        ...formData.getHeaders(),
+      },
+      maxContentLength: Infinity,
+      maxBodyLength: Infinity,
+    });
+    
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      const status = error.response.status;
+      const data = error.response.data;
+      
+      if (status === 403) {
+        throw new Error(`Forbidden: Check your API key. Status: ${status}, Response: ${JSON.stringify(data)}`);
+      } else if (status === 401) {
+        throw new Error(`Unauthorized: Invalid API key. Status: ${status}, Response: ${JSON.stringify(data)}`);
+      } else {
+        throw new Error(`API Error (${status}): ${JSON.stringify(data)}`);
+      }
+    }
+    throw new Error(`File upload error: ${error.message}`);
+  }
+}
+
+export { API_ENDPOINTS, makeApiRequest, uploadFile, MOORCHEH_API_KEY }; 

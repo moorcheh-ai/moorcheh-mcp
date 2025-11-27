@@ -5,7 +5,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 
 // Import tools
 import { listNamespacesTool, createNamespaceTool, deleteNamespaceTool } from './tools/namespace-tools.js';
-import { uploadTextTool, uploadVectorsTool, deleteDataTool, getDataTool } from './tools/data-tools.js';
+import { uploadTextTool, uploadVectorsTool, deleteDataTool, getDataTool, uploadFileTool } from './tools/data-tools.js';
 import { searchTool, answerTool } from './tools/search-tools.js';
 
 // Import resources
@@ -154,6 +154,13 @@ server.tool(
   getDataTool.description,
   getDataTool.parameters,
   getDataTool.handler,
+);
+
+server.tool(
+  uploadFileTool.name,
+  uploadFileTool.description,
+  uploadFileTool.parameters,
+  uploadFileTool.handler,
 );
 
 // Register search tools
