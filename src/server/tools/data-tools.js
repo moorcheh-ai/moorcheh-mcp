@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { makeApiRequest, API_ENDPOINTS } from '../config/api.js';
+import { makeApiRequest, API_ENDPOINTS, uploadFile } from '../config/api.js';
 
 // Upload text documents tool
 export const uploadTextTool = {
@@ -150,6 +150,41 @@ export const getDataTool = {
           {
             type: "text",
             text: `Error fetching data: ${error.message}`,
+          },
+        ],
+      };
+    }
+  },
+};
+
+// Upload file tool
+export const uploadFileTool = {
+  name: "upload-file",
+  description: "Upload a file directly to a text-type namespace for processing and indexing. Files are queued for ingestion and will be available for search once processed. Supported file types: .pdf, .docx, .xlsx, .json, .txt, .csv, .md (max 10MB)",
+  parameters: {
+    namespace_name: z.string().describe("Name of the text namespace to upload the file to"),
+    file_path: z.string().describe("Path to the file to upload (max 10MB). Must be one of: .pdf, .docx, .xlsx, .json, .txt, .csv, .md"),
+  },
+  handler: async ({ namespace_name, file_path }) => {
+    try {
+      const data = await uploadFile(namespace_name, file_path);
+
+      const resultText = `Successfully uploaded file "${data.fileName}" to namespace "${namespace_name}":\n${JSON.stringify(data, null, 2)}`;
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: resultText,
+          },
+        ],
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Error uploading file: ${error.message}`,
           },
         ],
       };

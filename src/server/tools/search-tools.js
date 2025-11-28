@@ -4,10 +4,10 @@ import { makeApiRequest, API_ENDPOINTS } from '../config/api.js';
 // Search tool
 export const searchTool = {
   name: "search",
-  description: "Search for data in a namespace using semantic search or vector similarity. This tool provides powerful search capabilities across your namespaces, supporting both text-based semantic search and vector-based similarity search. For text search, you can use natural language queries to find relevant documents based on meaning rather than just keywords. For vector search, you can find similar content by comparing vector embeddings. The tool supports advanced features like result filtering, similarity thresholds, and kiosk mode for production environments. This is ideal for building intelligent search interfaces, recommendation systems, or content discovery features.",
+  description: "Search for data in a namespace using semantic search or vector similarity. This tool provides powerful search capabilities across your namespaces, supporting both text-based semantic search and vector-based similarity search. For text search, you can use natural language queries to find relevant documents based on meaning rather than just keywords. For vector search, you can find similar content by comparing vector embeddings. The tool supports advanced features like result filtering, similarity thresholds, metadata filters, keyword filters, and kiosk mode for production environments. This is ideal for building intelligent search interfaces, recommendation systems, or content discovery features.\n\nFiltering Capabilities:\n- Metadata Filters: Use #key:value format (e.g., #category:tech, #priority:high)\n- Keyword Filters: Use #keyword format (e.g., #important, #urgent)\n- Filters only apply to text search and metadata must be manually uploaded with documents",
   parameters: {
     namespaces: z.array(z.string().min(1)).min(1).describe("Namespaces to search in. Provide an array of namespace names where you want to search for content. You can search across multiple namespaces simultaneously. All namespaces must be accessible with your API key."),
-    query: z.union([z.string().min(1), z.array(z.number())]).describe("Search query. For text search: provide a natural language query string (e.g., 'tell me about the company?', 'how to configure authentication?'). For vector search: provide an array of numbers representing a vector embedding (e.g., [0.1, 0.2, 0.3, ..., 0.768]). The query type will be automatically detected based on the input format. DO NOT USE QUOTES IN THE QUERY FOR VECTOR SEARCH."),
+    query: z.union([z.string().min(1), z.array(z.number())]).describe("Search query. For text search: provide a natural language query string (e.g., 'tell me about the company?', 'how to configure authentication?'). For vector search: provide an array of numbers representing a vector embedding (e.g., [0.1, 0.2, 0.3, ..., 0.768]). The query type will be automatically detected based on the input format. DO NOT USE QUOTES IN THE QUERY FOR VECTOR SEARCH.\n\nFiltering: For text search, you can include filters in your query:\n- Metadata filters: #category:tech #priority:high\n- Keyword filters: #important #urgent\n- Combine both: 'serverless benefits #category:tech #important'"),
     query_type: z.enum(['text', 'vector']).optional().describe("Type of query to perform. 'text' for semantic search using natural language queries. 'vector' for similarity search using vector embeddings. If not specified, the type will be automatically detected based on the query format (string for text, array for vector)."),
     top_k: z.number().int().positive().optional().describe("Number of top results to return. Controls how many search results are returned, with higher values providing more comprehensive results. Default is 10. Use lower values (3-5) for focused results, higher values (10-20) for broader exploration."),
     threshold: z.number().min(0).max(1).optional().describe("Similarity threshold for results. A value between 0 and 1 that filters results based on similarity score. Higher values (0.7-0.9) return only highly similar results, lower values (0.3-0.5) return more comprehensive results. Required when kiosk_mode is true."),
@@ -127,14 +127,32 @@ export const searchTool = {
       const formattedResults = data.results.map((result, index) =>
         [
           `Result ${index + 1}:`,
-          `Content: ${result.content}`,
+          `ID: ${result.id || 'N/A'}`,
+          `Text: ${result.text || result.content || 'N/A'}`,
           `Score: ${result.score || 'N/A'}`,
+          `Label: ${result.label || 'N/A'}`,
           `Metadata: ${JSON.stringify(result.metadata || {}, null, 2)}`,
           "---",
         ].join("\n")
       );
       
-      const searchText = `Search results for "${query}" in namespaces [${namespaces.join(', ')}]:\n\n${formattedResults.join("\n")}\n\nTotal results: ${data.total || data.results.length}`;
+      let searchText = `Search results for "${query}" in namespaces [${namespaces.join(', ')}]:\n\n${formattedResults.join("\n")}\n\nTotal results: ${data.total || data.results.length}`;
+      
+      // Add execution time and performance metrics if available
+      if (data.execution_time) {
+        searchText += `\n\nExecution time: ${data.execution_time}s`;
+      }
+      
+      if (data.timings) {
+        searchText += `\n\nPerformance breakdown:\n${Object.entries(data.timings)
+          .filter(([key]) => key !== 'total')
+          .map(([key, value]) => `  ${key}: ${value}s`)
+          .join('\n')}`;
+      }
+      
+      if (data.optimization_info) {
+        searchText += `\n\nOptimization: ${data.optimization_info.fetch_strategy}`;
+      }
       
       return {
         content: [
@@ -160,9 +178,9 @@ export const searchTool = {
 // Answer tool
 export const answerTool = {
   name: "answer",
-  description: "Get AI-generated answers based on data in a namespace using text queries. This tool provides intelligent, context-aware responses by searching through your stored text documents and generating comprehensive answers using advanced language models.",
+  description: "Get AI-generated answers based on data in a namespace using text queries. This tool provides intelligent, context-aware responses by searching through your stored text documents and generating comprehensive answers using advanced language models. Supports two modes: Search Mode (with namespace) and Direct AI Mode (empty namespace).",
   parameters: {
-    namespace: z.string().min(1).describe("Namespace to answer questions from. Must be a text namespace containing the documents that will be searched to generate answers. The namespace should contain relevant content that can answer the types of questions you expect to ask."),
+    namespace: z.string().describe("Namespace to answer questions from. For Search Mode: provide a text namespace containing documents to search for context. For Direct AI Mode: provide empty string \"\" to make direct AI model calls without searching your data."),
     query: z.string().min(1).describe("Text query for AI answer generation. Provide a natural language question or prompt that you want the AI to answer. The AI will search through your namespace content and generate a comprehensive response based on the relevant information found."),
     top_k: z.number().int().positive().optional().describe("Number of top results to return. Controls how many relevant documents the AI considers when generating an answer. Default is 5. Use lower values (3-5) for focused answers, higher values (8-10) for comprehensive responses that consider more context."),
     threshold: z.number().min(0).max(1).optional().describe("Similarity threshold for results. A value between 0 and 1 that filters documents based on relevance before generating the answer. Higher values (0.7-0.9) ensure only highly relevant content is used, lower values (0.3-0.5) include more context. Required when kiosk_mode is true."),
@@ -178,35 +196,61 @@ export const answerTool = {
   },
   handler: async ({ namespace, query, top_k = 5, threshold, kiosk_mode = false, aiModel, chatHistory = [], headerPrompt, footerPrompt, temperature = 0.7 }) => {
     try {
+      // Determine if this is Direct AI Mode (empty namespace) or Search Mode (with namespace)
+      const isDirectAIMode = namespace === "";
+      
       const requestBody = {
         namespace,
         query,
-        top_k,
-        kiosk_mode,
       };
       
-      if (threshold !== undefined) {
-        requestBody.threshold = threshold;
-      }
-      if (aiModel) {
-        requestBody.aiModel = aiModel;
-      }
-      if (chatHistory && chatHistory.length > 0) {
-        requestBody.chatHistory = chatHistory;
-      }
-      if (headerPrompt) {
-        requestBody.headerPrompt = headerPrompt;
-      }
-      if (footerPrompt) {
-        requestBody.footerPrompt = footerPrompt;
-      }
-      if (temperature !== undefined) {
-        requestBody.temperature = temperature;
+      if (isDirectAIMode) {
+        // Direct AI Mode: Only allow basic AI fields
+        if (aiModel) {
+          requestBody.aiModel = aiModel;
+        }
+        if (chatHistory && chatHistory.length > 0) {
+          requestBody.chatHistory = chatHistory;
+        }
+        if (headerPrompt) {
+          requestBody.headerPrompt = headerPrompt;
+        }
+        if (footerPrompt) {
+          requestBody.footerPrompt = footerPrompt;
+        }
+        if (temperature !== undefined) {
+          requestBody.temperature = temperature;
+        }
+      } else {
+        // Search Mode: Allow all fields including search parameters
+        requestBody.top_k = top_k;
+        requestBody.kiosk_mode = kiosk_mode;
+        
+        if (threshold !== undefined) {
+          requestBody.threshold = threshold;
+        }
+        if (aiModel) {
+          requestBody.aiModel = aiModel;
+        }
+        if (chatHistory && chatHistory.length > 0) {
+          requestBody.chatHistory = chatHistory;
+        }
+        if (headerPrompt) {
+          requestBody.headerPrompt = headerPrompt;
+        }
+        if (footerPrompt) {
+          requestBody.footerPrompt = footerPrompt;
+        }
+        if (temperature !== undefined) {
+          requestBody.temperature = temperature;
+        }
       }
 
       const data = await makeApiRequest('POST', API_ENDPOINTS.answer, requestBody);
 
-      const resultText = `AI Answer for "${query}" in namespace "${namespace}":\n\n${data.answer || data.response || JSON.stringify(data, null, 2)}`;
+      const mode = isDirectAIMode ? "Direct AI Mode" : "Search Mode";
+      const namespaceInfo = isDirectAIMode ? "no namespace (direct AI call)" : `namespace "${namespace}"`;
+      const resultText = `AI Answer (${mode}) for "${query}" using ${namespaceInfo}:\n\n${data.answer || data.response || JSON.stringify(data, null, 2)}`;
 
       return {
         content: [
