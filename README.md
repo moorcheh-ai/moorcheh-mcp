@@ -208,6 +208,7 @@ The Moorcheh MCP server provides tools for:
 ### Data Tools
 - **`upload-text`**: Upload text documents to a namespace
 - **`upload-vectors`**: Upload vector embeddings to a namespace
+- **`upload-file`**: Upload files directly to a text-type namespace (supports .pdf, .docx, .xlsx, .json, .txt, .csv, .md, max 10MB)
 - **`get-data`**: Retrieve text documents by ID from text namespaces
 - **`delete-data`**: Remove specific data items from a namespace
 
@@ -219,11 +220,14 @@ The Moorcheh MCP server provides tools for:
 
 | Model ID | Name | Provider | Description |
 |----------|------|----------|-------------|
-| `anthropic.claude-3-7-sonnet-20250219-v1:0` | Claude 3.7 Sonnet | Anthropic | Latest Claude model with enhanced capabilities |
-| `anthropic.claude-sonnet-4-20250514-v1:0` | Claude Sonnet 4 | Anthropic | Latest Claude model with enhanced capabilities |
-| `meta.llama4-maverick-17b-instruct-v1:0` | Llama 4 Maverick | Meta | Latest Llama model optimized for instruction following |
-| `meta.llama3-3-70b-instruct-v1:0` | Llama 3 70B | Meta | Large Llama model with strong general capabilities |
-| `deepseek.r1-v1:0` | DeepSeek-R1 | DeepSeek | Specialized model for research and analysis |
+| `anthropic.claude-sonnet-4-20250514-v1:0` | Claude Sonnet 4 | Anthropic | Hybrid reasoning, extended thinking, efficient code generation |
+| `anthropic.claude-sonnet-4-5-20250929-v1:0` | Claude Sonnet 4.5 | Anthropic | Latest Claude model with enhanced capabilities and agentic search |
+| `meta.llama4-maverick-17b-instruct-v1:0` | Llama 4 Maverick 17B | Meta | 1M token context, fine tuning, text summarization, function calling |
+| `meta.llama3-3-70b-instruct-v1:0` | Llama 3.3 70B | Meta | Advanced reasoning and decision making capabilities |
+| `amazon.nova-pro-v1:0` | Amazon Nova Pro | Amazon | 300K context, chat optimized, complex reasoning, math |
+| `deepseek.r1-v1:0` | DeepSeek R1 | DeepSeek | Advanced reasoning and code generation |
+| `openai.gpt-oss-120b-1:0` | OpenAI GPT OSS 120B | OpenAI | Hybrid reasoning, extended thinking, efficient research |
+| `qwen.qwen3-32b-v1:0` | Qwen 3 32B | Qwen | Text generation and code generation |
 
 ## Prerequisites
 
@@ -289,34 +293,4 @@ We welcome contributions! Please feel free to submit a Pull Request.
 
 ## Changelog
 
-### v1.2.2
-- Package Name: Updated to `@moorchehai/mcp` for official Moorcheh organization
-- NPX Support: Added CLI wrapper for seamless `npx -y @moorchehai/mcp` execution
-- Package Structure: Configured for npm registry publishing
-- CLI Features: Added help, version commands and API key validation
-- User Experience: Improved error messages and installation guidance
-
-### v1.2.1
-- NPX Support: Added CLI wrapper for seamless `npx -y @moorcheh/mcp` execution
-- Package Structure: Configured for npm registry publishing as `@moorcheh/mcp`
-- CLI Features: Added help, version commands and API key validation
-- User Experience: Improved error messages and installation guidance
-
-### v1.2.0
-- New tool: `get-data` to fetch documents by ID from text namespaces (POST /namespaces/{name}/documents/get)
-- Reliability: Static documentation resources to avoid invalid URI errors in MCP clients
-- Windows compatibility: Use ';' for command chaining in PowerShell
-- Stability: Ensured stdout handling respects MCP JSON-RPC framing
-
-### v1.1.0
-- Enhanced prompt system with dynamic content generation
-- Added comprehensive argument schemas with Zod validation
-- Improved search optimization, data organization, and AI answer setup prompts
-- Updated prompt registration to use new MCP SDK signature
-- Better user guidance and interactive prompt responses
-
-### v1.0.0
-- Initial release with MCP server functionality
-- Support for text and vector operations
-- AI-powered answer generation
-- Comprehensive documentation 
+For a detailed list of changes, see [CHANGELOG.md](CHANGELOG.md).
