@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2]
+
+### Changed
+- Aligned API request/response field naming with Moorcheh API snake_case conventions
+  - Updated answer fields to use `ai_model`, `chat_history`, `header_prompt`, and `footer_prompt`
+  - Updated namespace response handling to use `created_at` and `item_count`
+- Improved endpoint alignment with current Moorcheh API reference
+  - Updated file upload flow to use pre-signed URL (`/upload-url`) and direct PUT upload
+  - Added support for both delete endpoints via `data_type` (`documents` and `vectors`)
+  - Updated answer tool defaults/fields (`top_k` default and `type: "text"` support)
+- Updated examples and docs snippets to use `x-api-key` (lowercase) and snake_case keys
+
 ## [1.3.1]
 
 ### Security

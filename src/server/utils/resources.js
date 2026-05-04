@@ -22,8 +22,8 @@ export const namespaceDetailsResource = {
   mimeType: "application/json",
   handler: async (uri) => {
     try {
-      const namespaceName = uri.split('/').pop();
-      const data = await makeApiRequest('GET', `${API_ENDPOINTS.namespaces}/${namespaceName}`);
+      const namespace_name = uri.split('/').pop();
+      const data = await makeApiRequest('GET', `${API_ENDPOINTS.namespaces}/${namespace_name}`);
       return JSON.stringify(data, null, 2);
     } catch (error) {
       return JSON.stringify({ error: error.message }, null, 2);
@@ -345,11 +345,11 @@ Include previous conversation context to:
 {
   "namespace": "your-namespace",
   "query": "How do I configure authentication?",
-  "headerPrompt": "You are a technical assistant...",
-  "footerPrompt": "Always include code examples...",
+  "header_prompt": "You are a technical assistant...",
+  "footer_prompt": "Always include code examples...",
   "temperature": 0.5,
   "top_k": 5,
-  "chatHistory": [
+  "chat_history": [
     {"role": "user", "content": "Previous question..."},
     {"role": "assistant", "content": "Previous answer..."}
   ]

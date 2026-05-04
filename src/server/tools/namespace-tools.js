@@ -26,8 +26,8 @@ export const listNamespacesTool = {
           `Namespace: ${ns.namespace_name}`,
           `Type: ${ns.type}`,
           `Vector Dimension: ${ns.vector_dimension || 'N/A'}`,
-          `Created: ${ns.createdAt}`,
-          `Items: ${ns.itemCount}`,
+          `Created: ${ns.created_at || 'N/A'}`,
+          `Items: ${ns.item_count || 'N/A'}`,
           "---",
         ].join("\n")
       );

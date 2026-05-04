@@ -2,7 +2,6 @@ import axios from 'axios';
 import { readFileSync, createReadStream, statSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join, basename } from 'path';
-import FormData from 'form-data';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -88,17 +87,12 @@ async function makeApiRequest(method, url, data = null) {
   }
 }
 
-// Helper function to upload files (multipart/form-data)
+// Helper function to upload files using pre-signed S3 URL flow
 async function uploadFile(namespace_name, filePath) {
   try {
     // Check if file exists
     const stats = statSync(filePath);
     const fileSizeInMB = stats.size / (1024 * 1024);
-    
-    // Check file size (max 10MB)
-    if (fileSizeInMB > 10) {
-      throw new Error(`File size (${fileSizeInMB.toFixed(2)}MB) exceeds maximum allowed size of 10MB`);
-    }
     
     // Check file extension
     const allowedExtensions = ['.pdf', '.docx', '.xlsx', '.json', '.txt', '.csv', '.md'];
@@ -106,24 +100,37 @@ async function uploadFile(namespace_name, filePath) {
     if (!allowedExtensions.includes(fileExtension)) {
       throw new Error(`File type '${fileExtension}' is not supported. Allowed types: ${allowedExtensions.join(', ')}`);
     }
-    
-    // Create FormData
-    const formData = new FormData();
-    const fileName = basename(filePath);
-    formData.append('file', createReadStream(filePath), fileName);
-    
-    // Make the request
-    const url = `${API_ENDPOINTS.namespaces}/${namespace_name}/upload-file`;
-    const response = await axios.post(url, formData, {
+
+    const file_name = basename(filePath);
+    const uploadUrlPayload = await makeApiRequest(
+      'POST',
+      `${API_ENDPOINTS.namespaces}/${namespace_name}/upload-url`,
+      { file_name }
+    );
+
+    if (!uploadUrlPayload?.upload_url || !uploadUrlPayload?.content_type) {
+      throw new Error(`Invalid upload URL response: ${JSON.stringify(uploadUrlPayload)}`);
+    }
+
+    await axios.put(uploadUrlPayload.upload_url, createReadStream(filePath), {
       headers: {
-        'x-api-key': MOORCHEH_API_KEY,
-        ...formData.getHeaders(),
+        'Content-Type': uploadUrlPayload.content_type,
+        'Content-Length': stats.size,
       },
       maxContentLength: Infinity,
       maxBodyLength: Infinity,
     });
-    
-    return response.data;
+
+    return {
+      status: 'success',
+      namespace_name,
+      file_name,
+      file_size_mb: Number(fileSizeInMB.toFixed(2)),
+      key: uploadUrlPayload.key,
+      content_type: uploadUrlPayload.content_type,
+      expires_in: uploadUrlPayload.expires_in,
+      message: 'File uploaded to storage successfully and queued for processing.',
+    };
   } catch (error) {
     if (error.response) {
       const status = error.response.status;

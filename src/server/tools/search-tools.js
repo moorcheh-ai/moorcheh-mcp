@@ -182,19 +182,20 @@ export const answerTool = {
   parameters: {
     namespace: z.string().describe("Namespace to answer questions from. For Search Mode: provide a text namespace containing documents to search for context. For Direct AI Mode: provide empty string \"\" to make direct AI model calls without searching your data."),
     query: z.string().min(1).describe("Text query for AI answer generation. Provide a natural language question or prompt that you want the AI to answer. The AI will search through your namespace content and generate a comprehensive response based on the relevant information found."),
-    top_k: z.number().int().positive().optional().describe("Number of top results to return. Controls how many relevant documents the AI considers when generating an answer. Default is 5. Use lower values (3-5) for focused answers, higher values (8-10) for comprehensive responses that consider more context."),
+    top_k: z.number().int().positive().optional().describe("Number of top results to return. Controls how many relevant documents the AI considers when generating an answer. Default is 10. Use lower values (3-5) for focused answers, higher values (8-10) for comprehensive responses that consider more context."),
+    type: z.enum(['text']).optional().describe("Search type for answer generation. Supported value is 'text'."),
     threshold: z.number().min(0).max(1).optional().describe("Similarity threshold for results. A value between 0 and 1 that filters documents based on relevance before generating the answer. Higher values (0.7-0.9) ensure only highly relevant content is used, lower values (0.3-0.5) include more context. Required when kiosk_mode is true."),
     kiosk_mode: z.boolean().optional().describe("Kiosk mode for restricted search. When true, search is restricted to specific namespaces with threshold filtering, providing more controlled and focused answers suitable for production environments."),
-    aiModel: z.string().optional().describe("AI model to use for answer generation. Different models may have different capabilities, response styles, and performance characteristics. Supported AI models include: 'anthropic.claude-3-7-sonnet-20250219-v1:0' (Claude 3.7 Sonnet), 'anthropic.claude-sonnet-4-20250514-v1:0' (Claude Sonnet 4), 'meta.llama4-maverick-17b-instruct-v1:0' (Llama 4 Maverick), 'meta.llama3-3-70b-instruct-v1:0' (Llama 3.3 70B), 'deepseek.r1-v1:0' (DeepSeek R1). If not specified, defaults to Claude 3.7 Sonnet."),
-    chatHistory: z.array(z.object({
+    ai_model: z.string().optional().describe("AI model to use for answer generation. Different models may have different capabilities, response styles, and performance characteristics. Supported AI models include: 'anthropic.claude-3-7-sonnet-20250219-v1:0' (Claude 3.7 Sonnet), 'anthropic.claude-sonnet-4-20250514-v1:0' (Claude Sonnet 4), 'meta.llama4-maverick-17b-instruct-v1:0' (Llama 4 Maverick), 'meta.llama3-3-70b-instruct-v1:0' (Llama 3.3 70B), 'deepseek.r1-v1:0' (DeepSeek R1). If not specified, defaults to Claude 3.7 Sonnet."),
+    chat_history: z.array(z.object({
       role: z.string().describe("Role of the message in the conversation. Use 'user' for user messages and 'assistant' for AI responses. This helps maintain conversation context and allows the AI to reference previous exchanges."),
       content: z.string()
     })).optional().describe("Chat history for AI answer generation. Provide previous conversation context to help the AI maintain continuity and reference earlier parts of the conversation. This enables more coherent multi-turn conversations."),
-    headerPrompt: z.string().optional().describe("Header prompt for AI answer generation. Custom instructions that define the AI's role, style, and behavior. Use this to create specialized assistants (e.g., technical support, friendly helper, formal advisor) or set specific guidelines for response generation."),
-    footerPrompt: z.string().optional().describe("Footer prompt for AI answer generation. Additional instructions that are applied after the main response generation. Useful for formatting requirements, citation styles, or specific response patterns that should be consistently applied."),
+    header_prompt: z.string().optional().describe("Header prompt for AI answer generation. Custom instructions that define the AI's role, style, and behavior. Use this to create specialized assistants (e.g., technical support, friendly helper, formal advisor) or set specific guidelines for response generation."),
+    footer_prompt: z.string().optional().describe("Footer prompt for AI answer generation. Additional instructions that are applied after the main response generation. Useful for formatting requirements, citation styles, or specific response patterns that should be consistently applied."),
     temperature: z.number().min(0).max(2.0).optional().describe("Temperature for AI answer generation. Controls the creativity and randomness of responses. Lower values (0.1-0.3) produce more focused, deterministic answers. Higher values (0.7-1.0) produce more creative, varied responses. Default is 0.7."),
   },
-  handler: async ({ namespace, query, top_k = 5, threshold, kiosk_mode = false, aiModel, chatHistory = [], headerPrompt, footerPrompt, temperature = 0.7 }) => {
+  handler: async ({ namespace, query, top_k = 10, type = 'text', threshold, kiosk_mode = false, ai_model, chat_history = [], header_prompt, footer_prompt, temperature = 0.7 }) => {
     try {
       // Determine if this is Direct AI Mode (empty namespace) or Search Mode (with namespace)
       const isDirectAIMode = namespace === "";
@@ -206,17 +207,17 @@ export const answerTool = {
       
       if (isDirectAIMode) {
         // Direct AI Mode: Only allow basic AI fields
-        if (aiModel) {
-          requestBody.aiModel = aiModel;
+        if (ai_model) {
+          requestBody.ai_model = ai_model;
         }
-        if (chatHistory && chatHistory.length > 0) {
-          requestBody.chatHistory = chatHistory;
+        if (chat_history && chat_history.length > 0) {
+          requestBody.chat_history = chat_history;
         }
-        if (headerPrompt) {
-          requestBody.headerPrompt = headerPrompt;
+        if (header_prompt) {
+          requestBody.header_prompt = header_prompt;
         }
-        if (footerPrompt) {
-          requestBody.footerPrompt = footerPrompt;
+        if (footer_prompt) {
+          requestBody.footer_prompt = footer_prompt;
         }
         if (temperature !== undefined) {
           requestBody.temperature = temperature;
@@ -224,22 +225,23 @@ export const answerTool = {
       } else {
         // Search Mode: Allow all fields including search parameters
         requestBody.top_k = top_k;
+        requestBody.type = type;
         requestBody.kiosk_mode = kiosk_mode;
         
         if (threshold !== undefined) {
           requestBody.threshold = threshold;
         }
-        if (aiModel) {
-          requestBody.aiModel = aiModel;
+        if (ai_model) {
+          requestBody.ai_model = ai_model;
         }
-        if (chatHistory && chatHistory.length > 0) {
-          requestBody.chatHistory = chatHistory;
+        if (chat_history && chat_history.length > 0) {
+          requestBody.chat_history = chat_history;
         }
-        if (headerPrompt) {
-          requestBody.headerPrompt = headerPrompt;
+        if (header_prompt) {
+          requestBody.header_prompt = header_prompt;
         }
-        if (footerPrompt) {
-          requestBody.footerPrompt = footerPrompt;
+        if (footer_prompt) {
+          requestBody.footer_prompt = footer_prompt;
         }
         if (temperature !== undefined) {
           requestBody.temperature = temperature;

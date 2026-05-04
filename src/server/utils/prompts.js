@@ -43,7 +43,7 @@ export const searchOptimizationPrompt = {
 \`\`\`bash
 curl -X POST "https://api.moorcheh.ai/v1/search" \\
   -H "Content-Type: application/json" \\
-  -H "x-api-Key: your-api-key-here" \\
+  -H "x-api-key: your-api-key-here" \\
   -d '{
     "query": [0.1, 0.2, 0.3, ..., 0.768],
     "namespaces": ["vector-embeddings"],
@@ -333,11 +333,11 @@ Include previous conversation context to:
 {
   "namespace": "your-namespace",
   "query": "How do I configure authentication?",
-  "headerPrompt": "You are a technical assistant...",
-  "footerPrompt": "Always include code examples...",
+  "header_prompt": "You are a technical assistant...",
+  "footer_prompt": "Always include code examples...",
   "temperature": 0.5,
   "top_k": 5,
-  "chatHistory": [
+  "chat_history": [
     {"role": "user", "content": "Previous question..."},
     {"role": "assistant", "content": "Previous answer..."}
   ]
