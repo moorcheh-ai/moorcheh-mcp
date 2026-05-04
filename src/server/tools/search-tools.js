@@ -186,7 +186,19 @@ export const answerTool = {
     type: z.enum(['text']).optional().describe("Search type for answer generation. Supported value is 'text'."),
     threshold: z.number().min(0).max(1).optional().describe("Similarity threshold for results. A value between 0 and 1 that filters documents based on relevance before generating the answer. Higher values (0.7-0.9) ensure only highly relevant content is used, lower values (0.3-0.5) include more context. Required when kiosk_mode is true."),
     kiosk_mode: z.boolean().optional().describe("Kiosk mode for restricted search. When true, search is restricted to specific namespaces with threshold filtering, providing more controlled and focused answers suitable for production environments."),
-    ai_model: z.string().optional().describe("AI model to use for answer generation. Different models may have different capabilities, response styles, and performance characteristics. Supported AI models include: 'anthropic.claude-3-7-sonnet-20250219-v1:0' (Claude 3.7 Sonnet), 'anthropic.claude-sonnet-4-20250514-v1:0' (Claude Sonnet 4), 'meta.llama4-maverick-17b-instruct-v1:0' (Llama 4 Maverick), 'meta.llama3-3-70b-instruct-v1:0' (Llama 3.3 70B), 'deepseek.r1-v1:0' (DeepSeek R1). If not specified, defaults to Claude 3.7 Sonnet."),
+    ai_model: z.string().optional().describe(
+      "AI model ID for answer generation (snake_case field sent to the API). Supported models: " +
+        "'anthropic.claude-sonnet-4-6' (Claude Sonnet 4.6), " +
+        "'anthropic.claude-opus-4-6-v1' (Claude Opus 4.6), " +
+        "'meta.llama4-maverick-17b-instruct-v1:0' (Llama 4 Maverick 17B), " +
+        "'amazon.nova-pro-v1:0' (Amazon Nova Pro), " +
+        "'deepseek.r1-v1:0' (DeepSeek R1), " +
+        "'deepseek.v3.2' (DeepSeek V3.2), " +
+        "'openai.gpt-oss-120b-1:0' (OpenAI GPT OSS 120B), " +
+        "'qwen.qwen3-32b-v1:0' (Qwen 3 32B), " +
+        "'qwen.qwen3-next-80b-a3b' (Qwen3 Next 80B A3B). " +
+        "If omitted, the Moorcheh API uses its default model for your account."
+    ),
     chat_history: z.array(z.object({
       role: z.string().describe("Role of the message in the conversation. Use 'user' for user messages and 'assistant' for AI responses. This helps maintain conversation context and allows the AI to reference previous exchanges."),
       content: z.string()
