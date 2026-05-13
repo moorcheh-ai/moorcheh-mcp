@@ -5,13 +5,21 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 
 // Import tools
 import { listNamespacesTool, createNamespaceTool, deleteNamespaceTool } from './tools/namespace-tools.js';
-import { uploadTextTool, uploadVectorsTool, deleteDataTool, getDataTool, uploadFileTool } from './tools/data-tools.js';
+import {
+  uploadTextTool,
+  uploadVectorsTool,
+  deleteDataTool,
+  getDataTool,
+  fetchTextDataTool,
+  uploadFileTool,
+  listFilesTool,
+  deleteFileTool,
+} from './tools/data-tools.js';
 import { searchTool, answerTool } from './tools/search-tools.js';
 
 // Import resources
 import {
   namespacesResource,
-  namespaceDetailsResource,
   apiDocsResource,
   configHelpResource,
   namespaceCreationGuideResource,
@@ -52,13 +60,6 @@ server.resource(
   namespacesResource.description,
   namespacesResource.mimeType,
   namespacesResource.handler
-);
-
-server.resource(
-  namespaceDetailsResource.uri,
-  namespaceDetailsResource.description,
-  namespaceDetailsResource.mimeType,
-  namespaceDetailsResource.handler
 );
 
 server.resource(
@@ -157,10 +158,31 @@ server.tool(
 );
 
 server.tool(
+  fetchTextDataTool.name,
+  fetchTextDataTool.description,
+  fetchTextDataTool.parameters,
+  fetchTextDataTool.handler,
+);
+
+server.tool(
   uploadFileTool.name,
   uploadFileTool.description,
   uploadFileTool.parameters,
   uploadFileTool.handler,
+);
+
+server.tool(
+  listFilesTool.name,
+  listFilesTool.description,
+  listFilesTool.parameters,
+  listFilesTool.handler,
+);
+
+server.tool(
+  deleteFileTool.name,
+  deleteFileTool.description,
+  deleteFileTool.parameters,
+  deleteFileTool.handler,
 );
 
 // Register search tools

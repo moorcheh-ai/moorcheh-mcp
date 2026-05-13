@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.4]
+
+### Added
+- **`fetch-text-data`** MCP tool: `GET /v1/namespaces/{namespace_name}/documents/fetch-text-data` to list stored text/summary chunks (up to 100 items per request; text namespaces only). See [Fetch Text Data](https://docs.moorcheh.ai/api-reference/data/fetch-text-data).
+- **`list-files`** MCP tool: `GET /v1/namespaces/{namespace_name}/list-files` to list raw file objects in document storage (S3). See [List Files](https://docs.moorcheh.ai/api-reference/files/list-files).
+- **`delete-file`** MCP tool: `DELETE /v1/namespaces/{namespace_name}/delete-file` with JSON body `file_name` and/or `file_names` (snake_case). See [Delete File](https://docs.moorcheh.ai/api-reference/data/delete-file).
+
+### Removed
+- MCP resource `moorcheh://namespace/{namespace_name}` that called undocumented/non-working `GET /v1/namespaces/{namespace_name}`. Use **`list-namespaces`** (or `moorcheh://docs/namespaces`) for per-namespace metadata from `GET /v1/namespaces`.
+
+## [1.3.3]
+
+### Changed
+- Refreshed supported AI model IDs and descriptions in the `answer` tool schema and README to match Moorcheh docs ([API reference — Available Models](https://docs.moorcheh.ai/api-reference/ai/generate#available-models))
+
+## [1.3.2]
+
+### Changed
+- Aligned API request/response field naming with Moorcheh API snake_case conventions
+  - Updated answer fields to use `ai_model`, `chat_history`, `header_prompt`, and `footer_prompt`
+  - Updated namespace response handling to use `created_at` and `item_count`
+- Improved endpoint alignment with current Moorcheh API reference
+  - Updated file upload flow to use pre-signed URL (`/upload-url`) and direct PUT upload
+  - Added support for both delete endpoints via `data_type` (`documents` and `vectors`)
+  - Updated answer tool defaults/fields (`top_k` default and `type: "text"` support)
+- Updated examples and docs snippets to use `x-api-key` (lowercase) and snake_case keys
+
 ## [1.3.1]
 
 ### Security

@@ -208,7 +208,10 @@ The Moorcheh MCP server provides tools for:
 ### Data Tools
 - **`upload-text`**: Upload text documents to a namespace
 - **`upload-vectors`**: Upload vector embeddings to a namespace
-- **`upload-file`**: Upload files directly to a text-type namespace (supports .pdf, .docx, .xlsx, .json, .txt, .csv, .md, max 10MB)
+- **`upload-file`**: Upload files to a text namespace via pre-signed URL (supported types: .pdf, .docx, .xlsx, .json, .txt, .csv, .md)
+- **`list-files`**: List raw file objects in S3 storage for a namespace (`GET /list-files`; see [List Files](https://docs.moorcheh.ai/api-reference/files/list-files))
+- **`delete-file`**: Delete one or more raw files from S3 storage (`DELETE /delete-file` with `file_name` and/or `file_names`; see [Delete File](https://docs.moorcheh.ai/api-reference/data/delete-file))
+- **`fetch-text-data`**: List text and summary chunks from a text namespace (GET `/documents/fetch-text-data`, up to 100 items per response; see [Fetch Text Data](https://docs.moorcheh.ai/api-reference/data/fetch-text-data))
 - **`get-data`**: Retrieve text documents by ID from text namespaces
 - **`delete-data`**: Remove specific data items from a namespace
 
@@ -216,18 +219,21 @@ The Moorcheh MCP server provides tools for:
 - **`search`**: Search across namespaces with vector similarity
 - **`answer`**: Get AI-generated answers based on top of your search 
 
-## Supported Bedrock Models
+## Supported AI models
+
+These IDs match the current Moorcheh [Available Models](https://docs.moorcheh.ai/python-sdk/ai/generate#available-models) list (REST `answer` / Python `answer.generate`).
 
 | Model ID | Name | Provider | Description |
 |----------|------|----------|-------------|
-| `anthropic.claude-sonnet-4-20250514-v1:0` | Claude Sonnet 4 | Anthropic | Hybrid reasoning, extended thinking, efficient code generation |
-| `anthropic.claude-sonnet-4-5-20250929-v1:0` | Claude Sonnet 4.5 | Anthropic | Latest Claude model with enhanced capabilities and agentic search |
-| `meta.llama4-maverick-17b-instruct-v1:0` | Llama 4 Maverick 17B | Meta | 1M token context, fine tuning, text summarization, function calling |
-| `meta.llama3-3-70b-instruct-v1:0` | Llama 3.3 70B | Meta | Advanced reasoning and decision making capabilities |
-| `amazon.nova-pro-v1:0` | Amazon Nova Pro | Amazon | 300K context, chat optimized, complex reasoning, math |
-| `deepseek.r1-v1:0` | DeepSeek R1 | DeepSeek | Advanced reasoning and code generation |
-| `openai.gpt-oss-120b-1:0` | OpenAI GPT OSS 120B | OpenAI | Hybrid reasoning, extended thinking, efficient research |
-| `qwen.qwen3-32b-v1:0` | Qwen 3 32B | Qwen | Text generation and code generation |
+| `anthropic.claude-sonnet-4-6` | Claude Sonnet 4.6 | Anthropic | Fast flagship: coding, tools, long docs and RAG (~1M context) |
+| `anthropic.claude-opus-4-6-v1` | Claude Opus 4.6 | Anthropic | Deepest reasoning and hardest tasks; pick when quality matters most (~1M context) |
+| `meta.llama4-maverick-17b-instruct-v1:0` | Llama 4 Maverick 17B | Meta | Long context, summarization, function calling, fine-tuning friendly |
+| `amazon.nova-pro-v1:0` | Amazon Nova Pro | Amazon | Chat, math, and structured answers for AWS-style workloads |
+| `deepseek.r1-v1:0` | DeepSeek R1 | DeepSeek | Step-by-step reasoning; math, logic, and technical explanations |
+| `deepseek.v3.2` | DeepSeek V3.2 | DeepSeek | Efficient general Q&A, multilingual, everyday RAG (~164K context) |
+| `openai.gpt-oss-120b-1:0` | OpenAI GPT OSS 120B | OpenAI | Large generalist: research-style answers and long-form writing |
+| `qwen.qwen3-32b-v1:0` | Qwen 3 32B | Qwen | Code and bilingual (EN/ZH) tasks in a smaller footprint |
+| `qwen.qwen3-next-80b-a3b` | Qwen3 Next 80B A3B | Qwen | MoE model for long chats, docs, and code at scale (~256K context) |
 
 ## Prerequisites
 

@@ -15,22 +15,6 @@ export const namespacesResource = {
   }
 };
 
-// Resource for namespace details
-export const namespaceDetailsResource = {
-  uri: "moorcheh://namespace/{namespace_name}",
-  description: "Details of a specific Moorcheh namespace",
-  mimeType: "application/json",
-  handler: async (uri) => {
-    try {
-      const namespaceName = uri.split('/').pop();
-      const data = await makeApiRequest('GET', `${API_ENDPOINTS.namespaces}/${namespaceName}`);
-      return JSON.stringify(data, null, 2);
-    } catch (error) {
-      return JSON.stringify({ error: error.message }, null, 2);
-    }
-  }
-};
-
 // Resource for API documentation
 export const apiDocsResource = {
   uri: "moorcheh://docs/api",
@@ -48,15 +32,20 @@ All requests require an API key in the \`x-api-key\` header.
 ## Endpoints
 
 ### Namespaces
-- **GET** \`/namespaces\` - List all namespaces
+- **GET** \`/namespaces\` - List all namespaces (includes per-namespace metadata such as type, item_count, created_at)
 - **POST** \`/namespaces\` - Create new namespace
 - **DELETE** \`/namespaces/{name}\` - Delete namespace
-- **GET** \`/namespaces/{name}\` - Get namespace details
 
 ### Documents
 - **POST** \`/namespaces/{name}/documents\` - Upload text documents
+- **GET** \`/namespaces/{name}/documents/fetch-text-data\` - List text/summary chunks (max 100 per response; text namespaces only)
 - **POST** \`/namespaces/{name}/vectors\` - Upload vector data
 - **POST** \`/namespaces/{name}/documents/delete\` - Delete specific documents
+
+### File storage (S3)
+- **POST** \`/namespaces/{name}/upload-url\` - Get pre-signed URL to upload a file
+- **GET** \`/namespaces/{name}/list-files\` - List raw file objects in storage (file_name, size, last_modified)
+- **DELETE** \`/namespaces/{name}/delete-file\` - Delete one or more files from storage (JSON body: \`file_name\` and/or \`file_names\`)
 
 ### Search & AI
 - **POST** \`/search\` - Search across namespaces
@@ -345,11 +334,11 @@ Include previous conversation context to:
 {
   "namespace": "your-namespace",
   "query": "How do I configure authentication?",
-  "headerPrompt": "You are a technical assistant...",
-  "footerPrompt": "Always include code examples...",
+  "header_prompt": "You are a technical assistant...",
+  "footer_prompt": "Always include code examples...",
   "temperature": 0.5,
   "top_k": 5,
-  "chatHistory": [
+  "chat_history": [
     {"role": "user", "content": "Previous question..."},
     {"role": "assistant", "content": "Previous answer..."}
   ]
