@@ -208,7 +208,10 @@ The Moorcheh MCP server provides tools for:
 ### Data Tools
 - **`upload-text`**: Upload text documents to a namespace
 - **`upload-vectors`**: Upload vector embeddings to a namespace
-- **`upload-file`**: Upload files directly to a text-type namespace (supports .pdf, .docx, .xlsx, .json, .txt, .csv, .md, max 10MB)
+- **`upload-file`**: Upload files to a text namespace via pre-signed URL (supported types: .pdf, .docx, .xlsx, .json, .txt, .csv, .md)
+- **`list-files`**: List raw file objects in S3 storage for a namespace (`GET /list-files`; see [List Files](https://docs.moorcheh.ai/api-reference/files/list-files))
+- **`delete-file`**: Delete one or more raw files from S3 storage (`DELETE /delete-file` with `file_name` and/or `file_names`; see [Delete File](https://docs.moorcheh.ai/api-reference/data/delete-file))
+- **`fetch-text-data`**: List text and summary chunks from a text namespace (GET `/documents/fetch-text-data`, up to 100 items per response; see [Fetch Text Data](https://docs.moorcheh.ai/api-reference/data/fetch-text-data))
 - **`get-data`**: Retrieve text documents by ID from text namespaces
 - **`delete-data`**: Remove specific data items from a namespace
 
